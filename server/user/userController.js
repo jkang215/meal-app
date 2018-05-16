@@ -68,14 +68,14 @@ userController.verifyUser = (req, res, next) => {
 };
 
 userController.addMeal = (req, res) => {
-  console.log('req params', req.params.username);
   if (req.body.title && req.body.description && req.body.tags) {
-    User.findOne({ username: req.params.username }, (err, found) => {
+    User.findOneAndUpdate({ username: req.params.username }, { $push: { meals: req.body } }, (err, found) => {
       if (err || !found) {
         console.log('Patch error:', err);
         res.status(400).json({ error: 'Could not find user to update' });
       } else {
-        found.meals.push(req.body);
+        console.log('updating', found);
+        found.meals.push(req.body); // For the display on return (update happens after this request)
         res.json(found);
       }
     });

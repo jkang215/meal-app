@@ -3,10 +3,10 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: './client/index.js',
-  devServer: { publicPath: '/build', port: 8080 },
+  devServer: { publicPath: '/', contentBase: './views', hot: true, port: 8080 },
   output: {
     path: path.resolve(__dirname, 'build/'),
-    filename: 'webpack-bundle.js',
+    filename: 'bundle.js',
   },
   module: {
     rules: [

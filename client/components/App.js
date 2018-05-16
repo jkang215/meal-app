@@ -13,10 +13,15 @@ class App extends Component {
     this.switchToSignup = this.switchToSignup.bind(this);
     this.addMeal = this.addMeal.bind(this);
     this.showMealMenu = this.showMealMenu.bind(this);
+    this.showQuiz = this.showQuiz.bind(this);
+    this.showHome = this.showHome.bind(this);
+    this.showSuggestions = this.showSuggestions.bind(this);
     this.logout = this.logout.bind(this);
     this.state = this.getInitialState();
   }
 
+  // Sends get request to grab initial state
+  // ISSUE: ssid's aren't set so user always has to log in
   getInitialState() {
     fetch('http://localhost:3000/logged/')
       .then(response => response.json())
@@ -32,6 +37,9 @@ class App extends Component {
             loggedIn: false,
             showSignup: false,
             mealMenu: false,
+            mealQuiz: false,
+            suggestions: false,
+            sTags: [],
           });
         } else {
           // Found session match
@@ -43,11 +51,15 @@ class App extends Component {
             loggedIn: true,
             showSignup: false,
             mealMenu: false,
+            mealQuiz: false,
+            suggestions: false,
+            sTags: [],
           });
         }
       });
   }
 
+  // Send post request to server to login, server responds with user data
   login() {
     // Grab username and password info from login element
     const un = document.getElementById('username-field').value;
@@ -71,6 +83,9 @@ class App extends Component {
               loggedIn: true,
               showSignup: false,
               mealMenu: false,
+              mealQuiz: false,
+              suggestions: false,
+              sTags: [],
             });
           } else {
             alert('Bad username/password combination');
@@ -79,12 +94,14 @@ class App extends Component {
     }
   }
 
+  // Sets state to render the signup component
   switchToSignup() {
     const copy = Object.assign({}, this.state);
     copy.showSignup = true;
     this.setState(copy);
   }
 
+  // Sends post request to server to create a new user in database
   signup() {
     const un = document.getElementById('username-field').value;
     const pw = document.getElementById('password-field').value;
@@ -110,20 +127,65 @@ class App extends Component {
               loggedIn: true,
               showSignup: false,
               mealMenu: false,
+              mealQuiz: false,
+              suggestions: false,
+              sTags: [],
             });
           }
         });
     }
   }
 
+  // Set state to render mealMenu
   showMealMenu() {
     const copy = Object.assign({}, this.state);
     copy.mealMenu = true;
     this.setState(copy);
   }
 
+  // Set state to render quiz menu
+  showQuiz() {
+    if (this.state.mealList.length > 0) {
+      const copy = Object.assign({}, this.state);
+      copy.mealQuiz = true;
+      this.setState(copy);
+    } else {
+      alert("You must add a meal first!");
+    }
+  }
+
+  // Set state to render suggestions menu
+  showSuggestions() {
+    // Gather checkboxes that are selected
+    const boxes = document.querySelectorAll('input');
+    const checked = [];
+    for (let i = 0; i < boxes.length; i += 1) {
+      if (boxes[i].checked) checked.push(boxes[i].value);
+    }
+    if (boxes.length > 0 && checked.length > 0) {
+      const copyState = Object.assign({}, this.state);
+      copyState.suggestions = true;
+      copyState.mealQuiz = false;
+      copyState.mealMenu = false;
+      copyState.sTags = checked;
+      this.setState(copyState);
+    } else {
+      alert("You must select a tag first!");
+    }
+  }
+
+  // Return state back to normal login values
+  showHome() {
+    const copy = Object.assign({}, this.state);
+    copy.mealQuiz = false;
+    copy.suggestions = false;
+    copy.sTags = [];
+    copy.mealMenu = false;
+    this.setState(copy);
+  }
+
+  // Add meal to user and close meal menu
   addMeal() {
-    // Add meal to user and close meal menu
     const mealTitle = document.getElementById('mTitle-field').value;
     const mealDescription = document.getElementById('mDescription-field').value;
     const mealTags = document.getElementById('mTags-field').value;
@@ -152,6 +214,9 @@ class App extends Component {
             loggedIn: true,
             showSignup: false,
             mealMenu: false,
+            mealQuiz: false,
+            suggestions: false,
+            sTags: [],
           });
         });
     }
@@ -169,22 +234,39 @@ class App extends Component {
             mealList: [],
             loggedIn: false,
             showSignup: false,
+            mealMenu: false,
+            mealQuiz: false,
+            suggestions: false,
+            sTags: [],
           });
         }
       });
   }
 
   render() {
-    const { login, signup, switchToSignup, addMeal, showMealMenu, logout } = this;
+    const { login, signup, switchToSignup, addMeal, showMealMenu, showQuiz, showSuggestions, showHome, logout } = this;
     console.log('rendering');
     if (this.state) {
       if (this.state.loggedIn) {
-        // Render user info and meal list
-        const { username, firstName, lastName, mealList, mealMenu } = this.state;
+        // Render user info and meal list if logged in
+        const { username, firstName, lastName, mealList, mealMenu, mealQuiz, suggestions, sTags } = this.state;
         return (
-          <div>
-            <MealList username={username} firstName={firstName} lastName={lastName} mealList={mealList} showMealMenu={showMealMenu} mealMenu={mealMenu} addMeal={addMeal} logout={logout} />
-          </div>
+          <MealList 
+            username={username}
+            firstName={firstName}
+            lastName={lastName}
+            mealList={mealList}
+            showMealMenu={showMealMenu}
+            mealMenu={mealMenu}
+            showQuiz={showQuiz}
+            mealQuiz={mealQuiz}
+            showSuggestions={showSuggestions}
+            suggestions={suggestions}
+            sTags={sTags}
+            showHome={showHome}
+            addMeal={addMeal}
+            logout={logout}
+          />
         );
       } else if (this.state.showSignup) {
         // Render signup component
