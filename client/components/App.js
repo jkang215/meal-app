@@ -4,6 +4,9 @@ import Login from './Login';
 import Signup from './Signup';
 import MealList from './MealList';
 
+function sanitized(string) {
+  return !(/[^A-Za-z0-9,-]/g).test(string);
+}
 
 class App extends Component {
   constructor(props) {
@@ -23,12 +26,11 @@ class App extends Component {
   // Sends get request to grab initial state
   // ISSUE: ssid's aren't set so user always has to log in
   getInitialState() {
-    fetch('http://localhost:3000/logged/')
+    fetch('http://localhost:3000/logged/', { credentials: 'include' })
       .then(response => response.json())
       .then((myJson) => {
         // No matching ssid session
         if (myJson.error) {
-          console.log('errored');
           this.setState({
             username: '',
             firstName: '',
@@ -64,9 +66,10 @@ class App extends Component {
     // Grab username and password info from login element
     const un = document.getElementById('username-field').value;
     const pw = document.getElementById('password-field').value;
-    if (un && pw) {
+    if (un && pw && sanitized(un) && sanitized(pw)) {
       fetch('http://localhost:3000/login/', {
         body: JSON.stringify({ username: un, password: pw }),
+        credentials: 'include',
         headers: {
           'content-type': 'application/json',
         },
@@ -108,9 +111,10 @@ class App extends Component {
     const fn = document.getElementById('firstName-field').value;
     const ln = document.getElementById('lastName-field').value;
 
-    if (un && pw && fn && ln) {
+    if (un && pw && fn && ln && sanitized(un) && sanitized(pw) && sanitized(fn) && sanitized(ln) ) {
       fetch('http://localhost:3000/signup/', {
         body: JSON.stringify({ username: un, password: pw, firstName: fn, lastName: ln }),
+        credentials: 'include',
         headers: {
           'content-type': 'application/json',
         },
@@ -190,15 +194,16 @@ class App extends Component {
     const mealDescription = document.getElementById('mDescription-field').value;
     const mealTags = document.getElementById('mTags-field').value;
 
-    if (mealTitle && mealDescription && mealTags) {
+    if (mealTitle && mealDescription && mealTags && sanitized(mealTitle) && sanitized(mealDescription) && sanitized(mealTags)) {
+      mealTags.replace(/ /g,''); // Remove whitespace from tags string
       const meal = {
         title: mealTitle,
         description: mealDescription,
         tags: mealTags.split(','),
       };
-      console.log('meal:', meal);
       fetch('http://localhost:3000/info/' + this.state.username, {
         body: JSON.stringify(meal),
+        credentials: 'include',
         headers: {
           'content-type': 'application/json',
         },
@@ -223,7 +228,7 @@ class App extends Component {
   }
 
   logout() {
-    fetch('http://localhost:3000/logout/')
+    fetch('http://localhost:3000/logout/', { credentials: 'include' })
       .then(response => response.json())
       .then((myJson) => {
         if (!myJson.error) {
@@ -271,17 +276,12 @@ class App extends Component {
       } else if (this.state.showSignup) {
         // Render signup component
         return (
-          <div>
-            <Signup signup={signup} />
-          </div>
+          <Signup signup={signup} />
         );
       }
       // Render login component
-      console.log('login rendered');
       return (
-        <div>
           <Login login={login} switchToSignup={switchToSignup} />
-        </div>
       );
     }
     // State still fetching
