@@ -49,9 +49,7 @@ userController.createUser = (req, res, next) => {
 * @param res - http.ServerResponse
 */
 userController.verifyUser = (req, res, next) => {
-  // verify github oauth user
   if (typeof req.body.username === 'string' && typeof req.body.password === 'string') {
-    // verify normal login
     User.findOne({ username: req.body.username }, (err, found) => {
       if (err || !found) {
         res.status(400).json({ error: 'Username not found in database' });
@@ -66,6 +64,21 @@ userController.verifyUser = (req, res, next) => {
     });
   } else {
     res.status(400).json({ error: 'Badly formatted verify request' });
+  }
+};
+
+userController.addMeal = (req, res) => {
+  console.log('req params', req.params.username);
+  if (req.body.title && req.body.description && req.body.tags) {
+    User.findOne({ username: req.params.username }, (err, found) => {
+      if (err || !found) {
+        console.log('Patch error:', err);
+        res.status(400).json({ error: 'Could not find user to update' });
+      } else {
+        found.meals.push(req.body);
+        res.json(found);
+      }
+    });
   }
 };
 

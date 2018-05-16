@@ -23,7 +23,8 @@ function setCookie(req, res, next) {
 * @param next - Callback with signature ([err])
 */
 function setSSIDCookie(req, res, next) {
-  res.cookie('ssid', res.locals.user._id, { maxAge: 900000, httpOnly: true });
+  console.log('Setting cookie', res.locals.user._id);
+  res.cookie('ssid', res.locals.user._id, { httpOnly: true });
   next();
 }
 

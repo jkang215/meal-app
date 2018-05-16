@@ -12,6 +12,8 @@ class App extends Component {
     this.signup = this.signup.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
     this.addMeal = this.addMeal.bind(this);
+    this.showMealMenu = this.showMealMenu.bind(this);
+    this.logout = this.logout.bind(this);
     this.state = this.getInitialState();
   }
 
@@ -29,6 +31,7 @@ class App extends Component {
             mealList: [],
             loggedIn: false,
             showSignup: false,
+            mealMenu: false,
           });
         } else {
           // Found session match
@@ -39,6 +42,7 @@ class App extends Component {
             mealList: myJson.meals,
             loggedIn: true,
             showSignup: false,
+            mealMenu: false,
           });
         }
       });
@@ -49,10 +53,8 @@ class App extends Component {
     const un = document.getElementById('username-field').value;
     const pw = document.getElementById('password-field').value;
     if (un && pw) {
-      const bod = { username: un, password: pw };
-      console.log('bod', bod);
       fetch('http://localhost:3000/login/', {
-        body: JSON.stringify(bod),
+        body: JSON.stringify({ username: un, password: pw }),
         headers: {
           'content-type': 'application/json',
         },
@@ -68,6 +70,7 @@ class App extends Component {
               mealList: myJson.meals,
               loggedIn: true,
               showSignup: false,
+              mealMenu: false,
             });
           } else {
             alert('Bad username/password combination');
@@ -77,7 +80,7 @@ class App extends Component {
   }
 
   switchToSignup() {
-    let copy = Object.assign({}, this.state);
+    const copy = Object.assign({}, this.state);
     copy.showSignup = true;
     this.setState(copy);
   }
@@ -90,7 +93,7 @@ class App extends Component {
 
     if (un && pw && fn && ln) {
       fetch('http://localhost:3000/signup/', {
-        body: { username: un, password: pw, firstName: fn, lastName: ln },
+        body: JSON.stringify({ username: un, password: pw, firstName: fn, lastName: ln }),
         headers: {
           'content-type': 'application/json',
         },
@@ -106,26 +109,81 @@ class App extends Component {
               mealList: myJson.meals,
               loggedIn: true,
               showSignup: false,
+              mealMenu: false,
             });
           }
         });
     }
   }
 
+  showMealMenu() {
+    const copy = Object.assign({}, this.state);
+    copy.mealMenu = true;
+    this.setState(copy);
+  }
+
   addMeal() {
-    // Render menu to add a meal
+    // Add meal to user and close meal menu
+    const mealTitle = document.getElementById('mTitle-field').value;
+    const mealDescription = document.getElementById('mDescription-field').value;
+    const mealTags = document.getElementById('mTags-field').value;
+
+    if (mealTitle && mealDescription && mealTags) {
+      const meal = {
+        title: mealTitle,
+        description: mealDescription,
+        tags: mealTags.split(','),
+      };
+      console.log('meal:', meal);
+      fetch('http://localhost:3000/info/' + this.state.username, {
+        body: JSON.stringify(meal),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'PATCH',
+      })
+        .then(response => response.json())
+        .then((myJson) => {
+          this.setState({
+            username: myJson.username,
+            firstName: myJson.firstName,
+            lastName: myJson.lastName,
+            mealList: myJson.meals,
+            loggedIn: true,
+            showSignup: false,
+            mealMenu: false,
+          });
+        });
+    }
+  }
+
+  logout() {
+    fetch('http://localhost:3000/logout/')
+      .then(response => response.json())
+      .then((myJson) => {
+        if (!myJson.error) {
+          this.setState({
+            username: '',
+            firstName: '',
+            lastName: '',
+            mealList: [],
+            loggedIn: false,
+            showSignup: false,
+          });
+        }
+      });
   }
 
   render() {
-    const { login, signup, switchToSignup, addMeal } = this;
+    const { login, signup, switchToSignup, addMeal, showMealMenu, logout } = this;
     console.log('rendering');
     if (this.state) {
       if (this.state.loggedIn) {
         // Render user info and meal list
-        const { username, firstName, lastName, mealList } = this.state;
+        const { username, firstName, lastName, mealList, mealMenu } = this.state;
         return (
           <div>
-            <MealList mealList={mealList} addMeal={addMeal} />
+            <MealList username={username} firstName={firstName} lastName={lastName} mealList={mealList} showMealMenu={showMealMenu} mealMenu={mealMenu} addMeal={addMeal} logout={logout} />
           </div>
         );
       } else if (this.state.showSignup) {

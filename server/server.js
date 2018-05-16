@@ -36,6 +36,9 @@ app.post('/signup', userController.createUser, userController.verifyUser, cookie
 // Login and serve home page
 app.post('/login', userController.verifyUser, cookieController.setSSIDCookie, sessionController.startSession);
 
+// Route for adding a meal to a user
+app.patch('/info/:username', userController.addMeal);
+
 /**
 * logout
 */
@@ -43,11 +46,7 @@ app.use('/logout', sessionController.endSession);
 
 // Get a user from the database
 // localhost://3000/"username"
-app.post('/info', userController.getUser);
-
-// Change a students name
-// localhost://3000/student/"name"
-// router.patch('/:username', );
+// app.post('/info', userController.getUser);
 
 // Delete a student from the database
 // localhost://3000/student/"name"
