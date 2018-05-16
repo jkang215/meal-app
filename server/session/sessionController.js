@@ -33,7 +33,7 @@ sessionController.isLoggedIn = (req, res, next) => {
 *
 */
 sessionController.startSession = (req, res) => {
-  Session.create({ cookieId: res.locals.id }, (err) => {
+  Session.create({ cookieId: res.locals.user._id }, (err) => {
     if (err) {
       console.log('Session error', err);
       res.status(400).json({ error: 'Could not create session' });

@@ -14,14 +14,14 @@ class App extends Component {
     this.addMeal = this.addMeal.bind(this);
     this.state = this.getInitialState();
   }
-  
+
   getInitialState() {
     fetch('http://localhost:3000/logged/')
       .then(response => response.json())
       .then((myJson) => {
-        console.log('fetching');
         // No matching ssid session
-        if (myJson.hasOwnProperty('error')) {
+        if (myJson.error) {
+          console.log('errored');
           this.setState({
             username: '',
             firstName: '',
@@ -30,30 +30,8 @@ class App extends Component {
             loggedIn: false,
             showSignup: false,
           });
-        }
-        // Found session match
-        this.setState({
-          username: myJson.username,
-          firstName: myJson.firstName,
-          lastName: myJson.lastName,
-          mealList: myJson.meals,
-          loggedIn: true,
-          showSignup: false,
-        });
-      });
-  }
-
-  login() {
-    // Grab username and password info from login element
-    const un = document.getElementById('username-field').value;
-    const pw = document.getElementById('password-field').value;
-    if (un && pw) {
-      fetch('http://localhost:3000/login/', {
-        body: JSON.stringify({ username: un, password: pw }),
-        method: 'POST',
-      })
-        .then(response => response.json())
-        .then((myJson) => {
+        } else {
+          // Found session match
           this.setState({
             username: myJson.username,
             firstName: myJson.firstName,
@@ -62,12 +40,46 @@ class App extends Component {
             loggedIn: true,
             showSignup: false,
           });
+        }
+      });
+  }
+
+  login() {
+    // Grab username and password info from login element
+    const un = document.getElementById('username-field').value;
+    const pw = document.getElementById('password-field').value;
+    if (un && pw) {
+      const bod = { username: un, password: pw };
+      console.log('bod', bod);
+      fetch('http://localhost:3000/login/', {
+        body: JSON.stringify(bod),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then((myJson) => {
+          if (!myJson.error) {
+            this.setState({
+              username: myJson.username,
+              firstName: myJson.firstName,
+              lastName: myJson.lastName,
+              mealList: myJson.meals,
+              loggedIn: true,
+              showSignup: false,
+            });
+          } else {
+            alert('Bad username/password combination');
+          }
         });
     }
   }
 
   switchToSignup() {
-    this.setState(Object.assign(this.state, { showSignup: true }));
+    let copy = Object.assign({}, this.state);
+    copy.showSignup = true;
+    this.setState(copy);
   }
 
   signup() {
@@ -78,19 +90,24 @@ class App extends Component {
 
     if (un && pw && fn && ln) {
       fetch('http://localhost:3000/signup/', {
-        body: JSON.stringify({ username: un, password: pw, firstName: fn, lastName: ln }),
+        body: { username: un, password: pw, firstName: fn, lastName: ln },
+        headers: {
+          'content-type': 'application/json',
+        },
         method: 'POST',
       })
         .then(response => response.json())
         .then((myJson) => {
-          this.setState({
-            username: myJson.username,
-            firstName: myJson.firstName,
-            lastName: myJson.lastName,
-            mealList: myJson.meals,
-            loggedIn: true,
-            showSignup: false,
-          });
+          if (!myJson.error) {
+            this.setState({
+              username: myJson.username,
+              firstName: myJson.firstName,
+              lastName: myJson.lastName,
+              mealList: myJson.meals,
+              loggedIn: true,
+              showSignup: false,
+            });
+          }
         });
     }
   }
@@ -106,13 +123,12 @@ class App extends Component {
       if (this.state.loggedIn) {
         // Render user info and meal list
         const { username, firstName, lastName, mealList } = this.state;
-
         return (
           <div>
             <MealList mealList={mealList} addMeal={addMeal} />
           </div>
         );
-      } else if (this.state.showSignUp) {
+      } else if (this.state.showSignup) {
         // Render signup component
         return (
           <div>
@@ -121,12 +137,14 @@ class App extends Component {
         );
       }
       // Render login component
+      console.log('login rendered');
       return (
         <div>
           <Login login={login} switchToSignup={switchToSignup} />
         </div>
       );
     }
+    // State still fetching
     return (
       <span>Loading...</span>
     );

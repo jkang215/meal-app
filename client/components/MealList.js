@@ -13,6 +13,7 @@ const mealList = (props) => {
           {listElements}
         </ul>
         <button onClick={() => { props.addMeal() }}>Add A Meal</button>
+        <button name="logout" id="logout-button" type="button"><a href="http://localhost:3000/logout">Logout</a></button>
       </div>
     );
   }

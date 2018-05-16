@@ -18,7 +18,7 @@ mongoose.connection.once('open', () => {
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(__dirname +'./../'));
@@ -27,7 +27,7 @@ app.use(express.static(__dirname +'./../'));
 app.get('/', (req, res) => {
   res.render('index.html');
 });
-// Route that will check for an active session
+// Route that will check for an active session on initial render
 app.get('/logged', sessionController.isLoggedIn);
 
 // Create user in database
