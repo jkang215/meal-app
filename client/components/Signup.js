@@ -5,6 +5,8 @@ const Signup = (props) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-6 col-xs-8 col-centered">
+          <h4>Sign Up!</h4>
+          <p>Create your account here! No hacks allowed Shen Shen.</p>
           <form id="signup-form">
             <input id="username-field" name="username" type="text" placeholder="Username"></input>
             <input id="password-field" name="password" type="password" placeholder="Password"></input>

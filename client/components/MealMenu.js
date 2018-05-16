@@ -5,6 +5,8 @@ const MealMenu = (props) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-6 col-xs-8 col-centered">
+          <h4>Create a new meal</h4>
+          <p>Add your meal here. Be sure to add descriptive tags!</p>
           <form id="meal-form">
             <input id="mTitle-field" name="username" type="text" placeholder="Title"></input>
             <input id="mDescription-field" name="password" type="text" placeholder="Description"></input>

@@ -17,6 +17,8 @@ const Quiz = (props) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-6 col-xs-8 col-centered">
+          <h4>What are you feelin'?</h4>
+          <p>Select some tags that match what you want to eat!</p>
           <form id="quiz-form">
             {tagElements}
             <button type='button' onClick={() => { props.showSuggestions() }}>Give me suggestions!</button>

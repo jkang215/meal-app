@@ -5,6 +5,8 @@ const Login = (props) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-6 col-xs-8 col-centered">
+          <h4>Welcome to the Meal App!</h4>
+          <p>Login here. If you're new, click Sign Up to get started!</p>
           <form id="login-form">
             <input id="username-field" name="username" type="text" placeholder="Username"></input>
             <input id="password-field" name="password" type="password" placeholder="Password"></input>

@@ -5,7 +5,7 @@ import Signup from './Signup';
 import MealList from './MealList';
 
 function sanitized(string) {
-  return !(/[^A-Za-z0-9,-]/g).test(string);
+  return !(/[^ A-Za-z0-9,-]/g).test(string);
 }
 
 class App extends Component {
@@ -24,7 +24,6 @@ class App extends Component {
   }
 
   // Sends get request to grab initial state
-  // ISSUE: ssid's aren't set so user always has to log in
   getInitialState() {
     fetch('http://localhost:3000/logged/', { credentials: 'include' })
       .then(response => response.json())
@@ -199,7 +198,7 @@ class App extends Component {
       const meal = {
         title: mealTitle,
         description: mealDescription,
-        tags: mealTags.split(','),
+        tags: mealTags.toLowerCase().split(','),
       };
       fetch('http://localhost:3000/info/' + this.state.username, {
         body: JSON.stringify(meal),
