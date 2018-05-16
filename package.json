@@ -1,5 +1,5 @@
 {
-  "name": "Meal App",
+  "name": "",
   "version": "1.0.0",
   "description": "Codesmith Solo Project",
   "main": "index.js",
@@ -9,16 +9,26 @@
     "webpack-server": "webpack-dev-server"
   },
   "author": "Jeff Kang",
-  "license": "",
+  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
+    "isomorphic-fetch": "^2.2.1",
     "mongoose": "^5.1.1",
     "nodemon": "^1.17.4",
     "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "request": "^2.86.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3",
+    "webpack-dev-server": "^3.1.4"
+  }
 }

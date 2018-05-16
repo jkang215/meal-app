@@ -20,13 +20,13 @@ module.exports = {
           presets: ['es2015', 'react'],
         },
       },
-      {
-        test: /\.scss$/,
-        include: [
-          path.resolve(__dirname, 'client/'),
-        ],
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
+      // {
+      //   test: /\.scss$/,
+      //   include: [
+      //     path.resolve(__dirname, 'client/'),
+      //   ],
+      //   use: ['style-loader', 'css-loader', 'sass-loader'],
+      // },
     ],
   },
 };

@@ -1,4 +1,5 @@
 const Session = require('./sessionModel');
+const User = require('./../user/userModel');
 
 const sessionController = {};
 
@@ -9,12 +10,18 @@ const sessionController = {};
 *
 */
 sessionController.isLoggedIn = (req, res, next) => {
-  Session.find({ cookieId: req.cookies.ssid }, (err, sessions) => {
-    if (err || !sessions[0]) {
-      console.log('Not logged in! What are you doing?!');
-      res.redirect('/signup');
+  Session.findOne({ cookieId: req.cookies.ssid }, (err, sessions) => {
+    if (err || !sessions) {
+      res.status(400).json({ error: 'Not logged in' });
     } else {
-      next();
+      User.findOne({ _id: req.cookies.ssid }, (err, found) => {
+        if (err || !found) {
+          res.status(400).json({ error: 'Could not find user for ssid' });
+        }
+        else {
+          res.json(found);
+        }
+      });
     }
   });
 };
@@ -25,22 +32,28 @@ sessionController.isLoggedIn = (req, res, next) => {
 *
 *
 */
-sessionController.startSession = (req, res, next) => {
+sessionController.startSession = (req, res) => {
   Session.create({ cookieId: res.locals.id }, (err) => {
-    if (err) console.log('Session error', err);
-    else console.log('Created session');
+    if (err) {
+      console.log('Session error', err);
+      res.status(400).json({ error: 'Could not create session' });
+    } else {
+      // Created session: send back user data to client
+      console.log('Created session');
+      res.json(res.locals.user);
+    }
   });
-  next();
 };
 
 sessionController.endSession = (req, res) => {
   Session.remove({ cookieId: req.cookies.ssid }, (err) => {
     if (err) {
       console.log('Did not remove SSID cookie');
+      res.status(400).json({ error: 'Could not remove session' });
     } else {
       console.log('Logging out');
       res.clearCookie('ssid');
-      res.redirect('/');
+      res.json({ success: 'Removed session cookie' });
     }
   });
 };
