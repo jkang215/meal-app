@@ -20,6 +20,12 @@ body {
   display: flex;
   flex-direction: column;
   align-content: center;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#mealList h3 {
+  margin-top: 1rem;
 }
 
 .col-centered {

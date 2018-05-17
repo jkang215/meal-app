@@ -23,7 +23,8 @@ const mealList = (props) => {
       <Suggestions mealList={mealList} sTags={props.sTags} showHome={props.showHome} />
     );
   }
-  if (mealList) {
+  if (mealList[0]) {
+    // Render meal list
     const listElements = mealList.map((meal, i) => {
       const tags = meal.tags.join(', ');
       return (
@@ -62,6 +63,7 @@ const mealList = (props) => {
     <div id="mealList">
       <h2>Welcome {props.firstName} {props.lastName}!</h2>
       <h3>Meal List</h3>
+      <p><em>To get started, add a meal!</em></p>
       <div className="buttons">
         <button className="btn btn-primary" onClick={() => { props.showMealMenu(); }}>Add A Meal</button>
         <button className="btn btn-default" onClick={() => { props.logout(); }} name="logout" id="logout-button" type="button">Logout</button>
