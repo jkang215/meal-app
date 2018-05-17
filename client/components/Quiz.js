@@ -7,8 +7,8 @@ const Quiz = (props) => {
     tags.push(...meal.tags);
   });
   const tagList = Array.from(new Set(tags)); // Remove duplicates with set
-  const tagElements = tagList.map(tag => (
-    <div className="checkbox">
+  const tagElements = tagList.map((tag, i) => (
+    <div key={i} className="checkbox">
       <label>
         <input type="checkbox" name="tag" value={tag}></input> {tag}
       </label>

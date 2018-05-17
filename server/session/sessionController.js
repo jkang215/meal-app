@@ -16,7 +16,7 @@ sessionController.isLoggedIn = (req, res, next) => {
     } else {
       User.findOne({ _id: req.cookies.ssid }, (err, found) => {
         if (err || !found) {
-          res.status(400).json({ error: 'Could not find user for ssid' });
+          res.status(400).json({ error: 'Could not find user ssid' });
         }
         else {
           res.json(found);
@@ -35,8 +35,7 @@ sessionController.isLoggedIn = (req, res, next) => {
 sessionController.startSession = (req, res) => {
   Session.create({ cookieId: res.locals.user._id }, (err) => {
     if (err) {
-      console.log('Session error', err);
-      res.status(400).json({ error: 'Could not create session' });
+      res.json({ warning: 'Session already exists' });
     } else {
       // Created session: send back user data to client
       console.log('Created session');

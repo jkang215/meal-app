@@ -27,7 +27,7 @@ const Suggestions = (props) => {
     const tags = meal.tags.join(', ');
     if (i === 0) { // Top match
       return (
-        <tr className="success">
+        <tr key={i} className="success">
           <td>{meal.title}</td>
           <td>{meal.description}</td>
           <td>{tags}</td>
@@ -36,7 +36,7 @@ const Suggestions = (props) => {
       );
     }
     return (
-      <tr>
+      <tr key={i}>
         <td>{meal.title}</td>
         <td>{meal.description}</td>
         <td>{tags}</td>

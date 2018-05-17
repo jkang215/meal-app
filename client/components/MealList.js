@@ -8,7 +8,7 @@ const mealList = (props) => {
   if (props.mealMenu) {
     // render menu to create a meal
     return (
-      <MealMenu addMeal={props.addMeal} />
+      <MealMenu addMeal={props.addMeal} showHome={props.showHome} />
     );
   }
   if (props.mealQuiz) {
@@ -24,10 +24,10 @@ const mealList = (props) => {
     );
   }
   if (mealList) {
-    const listElements = mealList.map((meal) => {
+    const listElements = mealList.map((meal, i) => {
       const tags = meal.tags.join(', ');
       return (
-        <tr>
+        <tr key={i}>
           <td>{meal.title}</td>
           <td>{meal.description}</td>
           <td>{tags}</td>

@@ -21,6 +21,7 @@ const MealMenu = (props) => {
               <input id="mTags-field" className="form-control" name="username" type="text" placeholder="Tags (Separated with commas)"></input>
             </div>
             <button className="btn btn-primary" type='button' onClick={() => { props.addMeal() }}>Add This Meal</button>
+            <button className="btn btn-default" type='button' onClick={() => { props.showHome() }}>Back</button>
           </form>
         </div>
       </div>
