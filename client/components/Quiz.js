@@ -8,9 +8,10 @@ const Quiz = (props) => {
   });
   const tagList = Array.from(new Set(tags)); // Remove duplicates with set
   const tagElements = tagList.map(tag => (
-    <div>
-      <input type="checkbox" name="tag" value={tag}></input>
-      <span className="quiz-tag"> {tag}</span>
+    <div className="checkbox">
+      <label>
+        <input type="checkbox" name="tag" value={tag}></input> {tag}
+      </label>
     </div>
   ));
   return (
@@ -21,7 +22,7 @@ const Quiz = (props) => {
           <p>Select some tags that match what you want to eat!</p>
           <form id="quiz-form">
             {tagElements}
-            <button type='button' onClick={() => { props.showSuggestions() }}>Give me suggestions!</button>
+            <button className="btn btn-primary" type='button' onClick={() => { props.showSuggestions() }}>Give me suggestions!</button>
           </form>
         </div>
       </div>

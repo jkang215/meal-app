@@ -8,10 +8,19 @@ const MealMenu = (props) => {
           <h4>Create a new meal</h4>
           <p>Add your meal here. Be sure to add descriptive tags!</p>
           <form id="meal-form">
-            <input id="mTitle-field" name="username" type="text" placeholder="Title"></input>
-            <input id="mDescription-field" name="password" type="text" placeholder="Description"></input>
-            <input id="mTags-field" name="firstName" type="text" placeholder="Tags (Separated with commas)"></input>
-            <button type='button' onClick={() => { props.addMeal() }}>Add This Meal</button>
+            <div className="form-group">
+              <label htmlFor="mTitle-field">Title</label>
+              <input id="mTitle-field" className="form-control" name="username" type="text" placeholder="Title"></input>
+            </div>
+            <div className="form-group">
+              <label htmlFor="mDescription-field">Description</label>
+              <input id="mDescription-field" className="form-control" name="username" type="text" placeholder="Description"></input>
+            </div>
+            <div className="form-group">
+              <label htmlFor="mTags-field">Tags</label>
+              <input id="mTags-field" className="form-control" name="username" type="text" placeholder="Tags (Separated with commas)"></input>
+            </div>
+            <button className="btn btn-primary" type='button' onClick={() => { props.addMeal() }}>Add This Meal</button>
           </form>
         </div>
       </div>

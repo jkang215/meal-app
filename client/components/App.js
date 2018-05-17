@@ -191,10 +191,10 @@ class App extends Component {
   addMeal() {
     const mealTitle = document.getElementById('mTitle-field').value;
     const mealDescription = document.getElementById('mDescription-field').value;
-    const mealTags = document.getElementById('mTags-field').value;
+    let mealTags = document.getElementById('mTags-field').value;
 
     if (mealTitle && mealDescription && mealTags && sanitized(mealTitle) && sanitized(mealDescription) && sanitized(mealTags)) {
-      mealTags.replace(/ /g,''); // Remove whitespace from tags string
+      mealTags = mealTags.replace(/ /g,''); // Remove whitespace from tags string
       const meal = {
         title: mealTitle,
         description: mealDescription,

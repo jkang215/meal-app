@@ -24,23 +24,36 @@ const mealList = (props) => {
     );
   }
   if (mealList) {
-    const listElements = mealList.map((meal, i) => {
+    const listElements = mealList.map((meal) => {
       const tags = meal.tags.join(', ');
       return (
-        <li>{i + 1}. {meal.title} - <em>{meal.description}</em> - <em>tags: {tags}</em> </li>
+        <tr>
+          <td>{meal.title}</td>
+          <td>{meal.description}</td>
+          <td>{tags}</td>
+        </tr>
       );
     });
     return (
       <div id="mealList">
         <h2>Welcome {props.firstName} {props.lastName}!</h2>
         <h3>Meal List</h3>
-        <ul>
-          {listElements}
-        </ul>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Description</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listElements}
+          </tbody>
+        </table>
         <div className="buttons">
-          <button onClick={() => { props.showMealMenu(); }}>Add A Meal</button>
-          <button onClick={() => { props.showQuiz(); }}>What should I eat?</button>
-          <button onClick={() => { props.logout(); }} name="logout" id="logout-button" type="button">Logout</button>
+          <button className="btn btn-primary" onClick={() => { props.showMealMenu(); }}>Add A Meal</button>
+          <button className="btn btn-primary" onClick={() => { props.showQuiz(); }}>What should I eat?</button>
+          <button className="btn btn-default" onClick={() => { props.logout(); }} name="logout" id="logout-button" type="button">Logout</button>
         </div>
       </div>
     );
@@ -50,8 +63,8 @@ const mealList = (props) => {
       <h2>Welcome {props.firstName} {props.lastName}!</h2>
       <h3>Meal List</h3>
       <div className="buttons">
-        <button onClick={() => { props.showMealMenu(); }}>Add A Meal</button>
-        <button onClick={() => { props.logout(); }} name="logout" id="logout-button" type="button">Logout</button>
+        <button className="btn btn-primary" onClick={() => { props.showMealMenu(); }}>Add A Meal</button>
+        <button className="btn btn-default" onClick={() => { props.logout(); }} name="logout" id="logout-button" type="button">Logout</button>
       </div>
     </div>
   );

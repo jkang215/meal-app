@@ -1,5 +1,5 @@
 body {
-  background-color: mintcream;
+  background-color: AliceBlue;
 }
 
 #main-title {
@@ -16,14 +16,6 @@ body {
   justify-content: flex-start;
 }
 
-#login-form,
-#signup-form,
-#meal-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 #mealList {
   display: flex;
   flex-direction: column;
@@ -38,5 +30,10 @@ body {
 .buttons {
   display: flex;
   flex-direction: column;
+  margin: 1rem;
   width: 200px;
+}
+
+.buttons .btn {
+  margin: 1rem;
 }
